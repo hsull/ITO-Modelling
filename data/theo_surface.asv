@@ -1,0 +1,77 @@
+
+% For each case, yield a vector of the volume of bars
+
+
+
+%% Test
+clear
+
+d = 0.2e-3;
+n = [1 : 15];
+l = 2e-02;
+d_vals = [100 : 20 : 500] * 10^(-9);
+M = zeros(length(d_vals),length(n));
+T = zeros(length(d_vals),length(n));
+R_ITO = 40;
+T_ITO = 1;
+T_Au = 0;
+
+
+for i = [1:length(d_vals)]
+    h = d_vals(i); 
+    test = R_eff(n, d, l, h, R_ITO);
+    M(i,:) = test;
+    alpha = (l*d*n)/l.^2;
+    T(i,:) = transmittance(alpha, T_ITO, T_Au);
+    V_ = n * l * d * h;
+end
+%% Plot
+figure(7)
+surf(n, d_vals, M, T);
+
+xlabel("Number of wires")
+ylabel("Width of wire (m)")
+zlabel("R_e_f_f")
+clabel = {"Transmittance %", "Test"};
+hcb = colorbar;
+colorTitleHandle = get(hcb,'Title');
+titleString = "T(%)";
+set(colorTitleHandle ,'String',titleString);
+title("R_e_f_f and Transmittance of 2\times2cm TCE by wire quantity, width")
+hold on
+
+%% Big Surface
+clear
+
+d_vals = [10e-9 : 10e-9: 0.2e-4];
+n = [1 : 15];
+l = 2e-02;
+h = 100 * 10^(-9);
+M = zeros(length(d_vals),length(n));
+T = zeros(length(d_vals),length(n));
+R_ITO = 40;
+T_ITO = 1;
+T_Au = 0;
+
+
+for i = [1:length(d_vals)]
+    d = d_vals(i); 
+    test = R_eff(n, d, l, h, R_ITO);
+    M(i,:) = test;
+    alpha = (l*d*n)/l.^2;
+    T(i,:) = transmittance(alpha, T_ITO, T_Au);
+end
+%% Plot
+figure(7)
+surf(n, d_vals, M, T);
+
+xlabel("Number of wires")
+ylabel("Diameter of wire (m)")
+zlabel("R_e_f_f")
+clabel = {"Transmittance %", "Test"};
+hcb = colorbar;
+colorTitleHandle = get(hcb,'Title');
+titleString = "T(%)";
+set(colorTitleHandle ,'String',titleString);
+title("R_e_f_f and Transmittance of 2\times2cm TCE by wire quantity, thickness")
+hold on
